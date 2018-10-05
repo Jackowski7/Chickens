@@ -1,0 +1,120 @@
+CHICKEN
+Name = string
+Age = float
+Gender = String
+HasEgg = y/n
+EatAmount = int (1,2,3 / baby,chick,chicken)
+Power = Floats - farmingPower, miningPower..
+Energy = float 100
+HP = float 100
+Inventory[25]
+Target 
+Job
+
+
+Target
+targetType / grow, mine, attack, harvest, hatch
+x (grownPercent, MinePercent, HP, VolumeRemaining, HatchDaysRemaining);
+y (growTime, MineDifficulty, Defense, HarvestDifficulty), 
+EnergyUsed
+DamageDealt(ToChicken)
+
+
+if (target.targetType = mine){
+	go to target;
+	coroutine every one second{
+		target.x -= (miningPower - (1 * (target.y / 100) ) //greater than or equal to 1
+		chicken.energy -= (1 * (energyUsed/100) )
+	}
+}
+
+if (target.targetType = farm){
+	go to target;
+	coroutine every one second{
+		target.x -= (farmPower - (1 * (target.y / 100) ) //greater than or equal to 1
+		chicken.energy -= (1 * (energyUsed/100) )
+	}
+}		
+
+if(targetType = attack){
+	go to target;
+	coroutine every one second{
+		target.x -= (attackPower - (1 * (target.y / 100) ) //greater than or equal to 1
+		chicken.hp -= (1 * (DamageDealt/100) )
+	}
+}		
+
+if(targetType = harvest){
+	go to target;
+	coroutine every one second{
+		chicken.Inventory[]nextopenslot == array id for item type ( 0 = empty, 1 = grain, 2 = wood.. ) ( [1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,21,1,1,1,1]... )
+		if chicken inventory full (no 0's), set target to storehouse.
+	}
+}
+
+if(targetType = hatch){
+	go to target;
+	coroutine every one second{
+		target.x -= (whatever timescale I use to make this take 3 in game weeks)
+		chicken.energy -= (1 * (EnergyUsed/100) )
+	}
+}
+
+if(targetType = storehouse){
+	go to target;
+	chicken.Inventory[] *count all items in inventory, add them to storehouse, set inventory to 0's;
+	go to Job;				
+}
+
+if(targetType = food){
+	if (food){
+		go to target;
+		while (food){
+			for (a=0; a<EatAmount; a++){
+				target.x - 1;
+				Energy += 10;
+			}
+			return;
+		}
+		go to Job;				
+	} else {
+		coroutine every 1 seconds{
+			if(food){
+				target = food;
+			}
+		}
+	}
+}
+
+//drain energy over time
+coroutine every 100 second{
+	energy -= 1;
+}
+
+if(HP < 100){
+	if (Energy > 0){
+		coroutine every 5 seconds{
+			Energy -= .5f;
+			HP += 1;
+		}
+	}
+}
+
+if (Energy < 15){
+	target = food;
+}
+if (Energy <= 0){
+	die();
+}
+
+if (HasEgg){
+	go to  most full incomplete nest in nearest hatchery;
+	nest eggs + 1;
+	HasEgg = nope;
+	
+	if (nest = full){
+	target = hatch this nest}
+	else {
+	target = job;
+	}
+}

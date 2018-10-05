@@ -1,0 +1,97 @@
+ok so chicken game
+fowl play??
+Land of the fowl?
+
+you are some chickens
+
+fundamentally, you produce eggs, eat food, and control the balance to grow a civilization of chickens.
+
+start with limited space, chickens, and resources.
+
+male chick = cockerel
+male chicken = Rooster
+female chick = pullet
+female adult = Hen
+chicks = any chickens under a year
+chickens = any adult chickens
+
+
+CHICKEN facts
+roosters dance a circle around hens if he's happy
+they do it if she's happy too
+hen lays an egg in an open close nest
+Eggs can be laid for 2 weeks before incubated
+when 12ish eggs are in one nest a Hen beings brooding phase (claiming eggs and caring for chicks until grown)
+brooding hen begins incubating for 21 days, then eggs hatch
+chicks stay with hen for 6 weeks, following, and getting to eat first.
+after 6 weeks, chicks become cockerels or pullets for 1 year, then become roosters or hens.
+cockerels and pullets are not productive, just play together all cute like and eat
+
+Chickens eat grain
+Chickens grow grain in fields
+
+Happiness
+Happiness is a measurement of the balance of a flocks needs and stuff.
+If there is plenty of food, and comfort, and scenery? And whatever, they’re happy
+Happy flocks do things better
+
+Golden eggs
+Hen’s have a chance to lay a golden egg.
+Variables can influence this (hen’s happiness/ flock’s happiness?)
+
+What are we buying with the money we make?..
+We seem like a pretty self sustaining flock, and don't need outside stuff. 
+
+RESOURCES
+Food/Grain
+Wood
+Stone
+Gold Eggs
+Cotton?Wool?Fabric?
+
+BUILDING TYPES
+Field/Farm
+Living Shack thing
+Hatchery
+Defense Hut outpost thing as an area for defending chickens to patrol
+Trading Post to sell gold eggs/buy resources
+Research Hut thing to learn  new recipes / upgrades
+
+Chicken Jobs
+work fields (all tasks involved grouped - plant, maintain, transport to storehouse)
+guard flock from attack (guard posts/towers)
+make chicken armour / weapons / tools
+clear land / gather resources - grouped task
+build things with resources - cosmetic and useful structures
+attack enemies
+Make trading posts
+Research new blueprints to build buildings and upgrade stuff
+
+
+DAYS
+
+morning - set chickens' targets to eat.
+eat() , set chickens' target to Job
+DoThing();
+
+noon - set chickens' targets to eat
+eat() , set chickens' targets to Job
+DoThing();
+
+evening - set chickens' targets to eat
+eat() , set chickens' targets to sleep
+DoThing();
+
+
+Pecking Order
+in Nature there's actually a 'pecking order' determining who gets to eat first (or who gets to decide who eats first)
+Chicks > Hens > Roosters (unless roosters are a shortage - should be 3-5 hens to 1 rooster)
+
+
+
+CHICKENS CAN GROW TEETH. I don’t know if this is useful but it’s true.
+
+
+
+
+
