@@ -5,12 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Chicken
-  - Farm
-  - Coop
-  - Mill
-  - StoreHouse
-  - GrainPile
   - Ground
+  - Target
+  - Water
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,418 @@
+
+	CHICKEN variables // some of them anyway
+		String Job;
+		
+	
+		List<GameObject> targetQueue = new List<GameObject>;
+		List<String> actionQueue = new List<String>;
+		List<String> resourceNeededQueue = new List<String>;		
+	
+	INFO variables // some of them anyway;
+		List<String> actions = new List<String> {"Harvest Wheat", "Harvest Wood", "Store Wheat", "Store Grain", "Craft Planks", "Craft Grain" } // actions that can be performed at said place.
+		List<String> resources = new List<String> {"Wheat", "Grain"} // resources said place can hold
+		
+		
+	
+	// [CHICKEN] find something to do
+	void FindTask(){
+		if (hungry) - chicken.Hungry();
+		if (sleepy) - chicken.Sleepy();
+		if (workingHours) - chickenManager.GetJobQueue(chicken);
+		// else - chicken.DoWhatever();
+	}		
+	
+	// [CHICKEN] 
+	void Hungry(){
+		chicken.target = chicken.FindTarget("grain");
+		chicken.action = "eat";
+		
+		startcoroutine(GoToTarget());
+	}
+	
+	// [CHICKEN] 
+	void Sleepy(){
+		chicken.target = chicken.FindTarget("sleep");
+		chicken.action = "sleep";
+		
+		startcoroutine(GoToTarget());
+	}
+	
+	// [CHICKEN MANAGER] tell chicken where to go, and what to do when it gets there.
+	void GetJobQueue(gameObject chicken){	
+		
+		//first clear out old queues
+		chicken.targetQueue = new List<GameObject>;
+		chicken.actionQueue = new List<String>;
+		chicken.resourceNeededQueue = new List<String>;
+		
+		//determine chicken's Job /// farmer, mill worker, builder, military bro, whatever.
+		if (chicken.job = "Farmer"){
+			//use job queue builder functions to build an appropriate task, dependent on relevant factors.		
+		}
+
+		
+		//GetAndPut("planks", someJobSite); // this will get planks and bring it to some specific job site			
+		//HarvestAndStore("Wheat"); // this will harvest wheat and find some place to put it.
+		//CraftAndStore("Planks"); // this will craft planks at some place and store them at some place.
+		//laborer // get from (farm/mill/whatever) and move to storehouse
+		//laborer // supply (sawmill/masonry/whatever) with ingrdients
+		//laborer // supply building sites with materials
+		
+		//EX.
+		//builder looks at buildings to be built - sorts by complete percent and distance, in some ridiculous algorithm			
+		//builder chicken selects best building to be built
+		//he checks that it has resources - 1 is good. checks 2,
+		//he does a getandput for the resource at the jobsite for resrouce 2, success. checks 3
+		//he tries to do a getandput for the resource at the jobsite for resrouce 3, fail, we're out of planks
+		//he can't continue, so he throws a flag and says we need more planks
+		//builder moves on to next building, all resources are good, he begins work until tired or done. new task
+		//meanwhile, craftsman chickens now see that planks are a priority
+		//craftsman chickens try and craft planks, they need wood
+		//craftsman chicken tried to do a getandput for wood at the sawmill, cant find any wood.
+		//craftsman chicken throws a flag for wood
+		//laborer chickens prioritize storage of wood from lumberjacks
+		//game suggests more lumberjacks or laborers?
+		//more wood is produced, stored, crafted into planks, brought to the jobsite, and the building can be built.
+			
+	
+		startcoroutine(DoJob());
+	}
+	
+	void GetAndPut(string thingToGet, GameObject target){
+		//task 1 - find and get a thing
+		chicken.targetQueue.Add(chicken.FindTarget(thingToGet); // find the thing
+		chicken.actionQueue.Add("get"); // set action to 'get' for when it arrives
+		chicken.resourceNeeded.Add("thingToGet"); // say it's the thing we're looking for when we 'get' from the location
+		
+		//task 2 - put the thing somewhere specific
+		chicken.targetQueue.Add(target); // set target
+		chicken.actionQueue.Add("put"); // set action to 'put' 
+		chicken.resourceNeeded.Add(""); // not needed, but has to exist.
+	}
+	
+	void HarvestAndStore(string thingToHarvest){
+		//task 1 - find and get a thing
+		chicken.targetQueue.Add(chicken.FindTarget("Harvest " + thingToHarvest)); // find a place to harvest the thing you want
+		chicken.actionQueue.Add("harvest"); // set action to 'harvest' for when it arrives
+		chicken.resourceNeeded.Add(""); // not needed, but has to exist.
+		
+		//task 2 - store the harvest somewhere
+		chicken.targetQueue.Add(chicken.FindTarget("Store " + thingToHarvest)); // set target
+		chicken.actionQueue.Add("put"); // set action to 'put' 
+		chicken.resourceNeeded.Add(""); // not needed, but has to exist.
+	}
+	
+	void CraftAndStore(string thingToCraft){
+		//task 1 - find and place to craft thing
+		chicken.targetQueue.Add(chicken.FindTarget("Craft " + thingToCraft)); // find the place to craft
+		chicken.actionQueue.Add("craft"); // set action to 'get' for when it arrives
+		chicken.resourceNeeded.Add(""); // say it's the thing we're looking for when we 'get' from the location
+		
+		//task 2 - store the thing somewhere
+		chicken.targetQueue.Add(chicken.FindTarget("Store " + thingToCraft)); // set target
+		chicken.actionQueue.Add("put"); // set action to 'put' 
+		chicken.resourceNeeded.Add(""); // not needed, but has to exist.
+	}
+	
+	
+	// [CHICKEN] 
+	ienumerator DoJob(){
+	
+		for (int x = 0 ; x < targetQueue.count ; x++){
+			chicken.target = targetQueue[x];
+			chicken.action = actionQueue[x];
+			chicken.resourceNeeded = resourceNeededQueue[x];
+			
+			startcoroutine(GoToTarget());		
+
+			chicken.JobTaskComplete = false;
+			
+			while (!chicken.JobTaskComplete){
+				yield return new waitforseconds(1 / gameSpeed);
+			}
+		}
+		
+		chicken.TaskComplete();
+	}
+	
+	
+	// [CHICKEN] get to your task
+	ienumerator GoToTarget(){
+		set ai.destination to target. //begin to navigate to target
+		
+		while (chicken hasn't made it yet){
+			if (it's been a long time and we're stuck or something)
+			{
+				//teleport?
+			}
+			yield return new waitforseconds(1 / gameSpeed);
+		}			
+		
+		chicken.DoAction();		
+	}
+	
+	// [CHICKEN] start doing what you're here to do
+	DoAction(){
+	
+		if (action = "put"){
+			startcoroutine(chicken.Put(target));
+		}
+
+		if (action = "get"){
+			startcoroutine(chicken.Get(target));
+		}		
+	
+		if (action = "Harvest"){
+			startcoroutine(chicken.Harvest(target));
+		}
+		
+		if (action = "craft"){
+			startcoroutine(chicken.Craft(target));
+		}
+		
+		if (action = "build"){
+			startcoroutine(chicken.Build(target));
+		}
+		
+		if (action = "eat"){
+			startcoroutine(chicken.Eat(target));
+		}
+
+		if (action = "sleep"){
+			startcoroutine(chicken.Sleep(target));
+		}				
+		
+	}
+	
+	// [CHICKEN]
+	ienumerator Eat(){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+		
+		while ( chicken.energy < 100 && TargetInfo.CheckQty("grain") >= 1){
+			chicken.energy += 20;
+			TargetInfo.RemoveRes("grain", 1f);	
+			yield return new waitforseconds(1 / gameSpeed);
+		}
+		
+		TaskComplete();		
+	}
+	
+	// [CHICKEN]
+	ienumerator Sleep(){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+
+		while (night){
+			yield return new waitforseconds(1 / gameSpeed);
+		}	
+		
+		TaskComplete();
+	}
+	
+	// [CHICKEN]
+	ienumerator Put(gameObject target){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+		
+		while ( TargetInfo.remainingCapacity >= 1 && chicken.amountCarried >= 1;)
+		{
+			TargetInfo.AddRes(chicken.resourceCarried, 1f);			
+			chicken.amountCarried --;
+			yield return new waitforseconds(1 / gameSpeed);
+		}		
+		
+		JobTaskComplete = true;
+	}
+	
+	// [CHICKEN]
+	ienumerator Get(gameObject target){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+
+		while ( chicken.remainingCapacity >= 1 && TargetInfo.CheckQty(chicken.resourceNeeded) >= 1)
+		{
+			chicken.resourceCarried = chicken.resourceNeeded;
+			chicken.amountCarried ++;
+			TargetInfo.RemoveRes(chicken.resourceNeeded, 1f);
+			yield return new waitforseconds(1 / gameSpeed);
+		}
+		
+		JobTaskComplete = true;
+	}
+	
+	// [CHICKEN]
+	ienumerator Harvest(gameObject target){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+	
+		while ( chicken.remainingCapacity >= 1 && chicken.energy >= TargetInfo.HarvestEnergyReq)
+		{
+			yield return new waitforseconds(TargetInfo.HarvestTime / gameSpeed);
+			chicken.resourceCarried = TargetInfo.HarvestResource;
+			chicken.energy -= TargetInfo.HarvestEnergyReq;
+			chicken.amountCarried ++;
+		}	
+		
+		JobTaskComplete = true;
+	}
+	
+	// [CHICKEN]
+	ienumerator Craft(gameObject target){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+	
+		while ( chicken.remainingCapacity >= 1 && chicken.energy >= TargetInfo.CraftEnergyReq && TargetInfo.CheckQty(TargetInfo.CraftIngredient) >= TargetInfo.CraftIngredientAmount )
+		{
+			yield return new waitforseconds(TargetInfo.CraftTime / gameSpeed);
+			chicken.energy -= TargetInfo.CraftEnergyReq;
+			chicken.resourceCarried = TargetInfo.CraftProduct;			
+			chicken.amountCarried ++;
+			TargetInfo.RemoveRes(TargetInfo.CraftIngredient, TargetInfo.CraftIngredientAmount);
+
+		}	
+		
+		JobTaskComplete = true;		
+	}
+	
+	// [CHICKEN]
+	ienumerator Build(gameObject target){
+		Info TargetInfo = chicken.target.getComponent<Info>();
+	
+		while ( chicken.energy >= TargetInfo.BuildEnergyReq
+		&& TargetInfo.CheckQty(TargetInfo.BuildMaterial1) >= TargetInfo.BuildMaterial1Amount
+		&& TargetInfo.CheckQty(TargetInfo.BuildMaterial2) >= TargetInfo.BuildMaterial2Amount
+		&& TargetInfo.CheckQty(TargetInfo.BuildMaterial3) >= TargetInfo.BuildMaterial3Amount ) // while we have energy, amd all the building materials are present
+		{
+			yield return new waitforseconds(TargetInfo.BuildTime / gameSpeed);
+			chicken.energy -= TargetInfo.BuildEnergyReq;
+			TargetInfo.buildPercent ++;
+			TargetInfo.RemoveRes(TargetInfo.BuildMaterial1, TargetInfo.BuildMaterial1Amount);
+			TargetInfo.RemoveRes(TargetInfo.BuildMaterial2, TargetInfo.BuildMaterial2Amount);
+			TargetInfo.RemoveRes(TargetInfo.BuildMaterial3, TargetInfo.BuildMaterial3Amount);
+
+		}	
+		
+		JobTaskComplete = true;		
+	}
+	
+	// [CHICKEN]
+	TaskComplete(){
+		throw a notice of task complete;
+		FindTask();
+	}
+	
+	// [CHICKEN]
+	GameObject FindTarget(string target){
+		List<GameObject> allTargets = new List<GameObject>(); //list of buidlings and targets to consider
+		List<GameObject> potentialTargets = new List<GameObject>(); //list of potential tasks to search for nearest.
+		
+		allTargets.AddRange(GameObject.FindGameObjectsWithTag("Interactable"));
+		
+		for (int x = 0; x < allTargets.Count; x++)
+		{
+			Info TargetInfo = allTargets[x].GetComponent<Info>();
+			
+			if (TargetInfo.actions.Contains(target)) // if this is a place you can do the intended action
+			{
+				if (TargetInfo.open && TargetInfo.SpotsUsed < TargetInfo.maxSpots) // and it's open, and it's got a free space to work
+				{
+					{
+						potentialTargets.Add(allTargets[x]); // add it to the list to conisder
+					}
+				}
+			}
+			
+			if (TargetInfo.resources.Contains(target)) // if this place can hold the resource we're looking for
+			{
+				if (target.Contains("Store")
+				{
+					if (TargetInfo.remainingCapacity >= 1;)
+					{
+						potentialTargets.Add(allTargets[x]);
+					}
+				}
+				else if (TargetInfo.CheckQty(target) >= 1) // and it actually has some in stock
+				{
+					{
+						potentialTargets.Add(allTargets[x]);
+					}
+				}
+			}
+			
+		}
+		
+		if (potentialTargets.Count > 0)
+		{
+			transform closestTarget = null;
+			float closestDistanceSqr = Mathf.Infinity;
+			Vector3 currentPosition = chicken.transform.position;
+
+			foreach (GameObject potentialTarget in potentialTargets)
+			{
+				Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
+				float dSqrToTarget = directionToTarget.sqrMagnitude;
+
+				if (dSqrToTarget < closestDistanceSqr)
+				{
+					closestDistanceSqr = dSqrToTarget;
+					bestTarget = potentialTarget.transform;
+				}
+			}
+
+			return closestTarget.gameObject;
+		}
+		else
+		{
+			Debug.Log(target + " location failed");
+			return null;
+		}		
+	}
+	
+	//[INFO]
+	Int CheckQty(string resource){	
+	
+		if (resource = "wheat"){
+			return this.wheatAmount;
+		}
+		
+		if (resource = "grain"){
+			return this.grainAmount;
+		}
+		...
+		
+		if (resource = ""){
+			return 0;
+		}	
+		
+	}
+	
+	//[INFO]
+	AddRes(string resource, int amount){
+	
+		if (resource = "wheat"){
+			this.wheatAmount += amount;
+		}
+		
+		if (resource = "grain"){
+			this.grainAmount += amount;
+		}
+		...
+		
+	}
+	
+	//[INFO]
+	RemoveRes(string resource, int amount){
+	
+		if (resource = "wheat"){
+			this.wheatAmount -= amount;
+		}
+		
+		if (resource = "grain"){
+			this.grainAmount -= amount;
+		}
+		...
+		
+		if (resource = ""){
+			// do nothing
+		} 
+		
+		else {
+			Debug.Log("wut?");
+		}
+		
+	}

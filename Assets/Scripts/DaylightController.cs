@@ -19,8 +19,8 @@ public class DaylightController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		sun.GetComponent<Light>().intensity = Mathf.Min(1.5f, 1.5f * gameManager.dayLight );
-		moon.GetComponent<Light>().intensity = Mathf.Min(1, -1 + (1 - gameManager.dayLight) * 2 );
+//		sun.GetComponent<Light>().intensity = Mathf.Min(1.5f, 1.5f * gameManager.dayLight );
+		//moon.GetComponent<Light>().intensity = Mathf.Min(1, -1 + (1 - gameManager.dayLight) * 2 );
 
 	}
 }
