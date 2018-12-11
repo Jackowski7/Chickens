@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Target
   - Water
+  - Node
+  - EdgeNode
   layers:
   - Default
   - TransparentFX
@@ -31,7 +33,7 @@ TagManager:
   - Obstacles
   - StoreHouses
   - Mills
-  - 
+  - Node
   - 
   - 
   - 
