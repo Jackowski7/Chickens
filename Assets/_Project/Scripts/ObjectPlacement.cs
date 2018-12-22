@@ -17,6 +17,7 @@ public class ObjectPlacement : MonoBehaviour
 	bool cancel;
 	bool place;
 	bool readyToPlace = false;
+	bool readyToRotate = true;
 
 	// Start is called before the first frame update
 	void Start()
@@ -145,62 +146,76 @@ public class ObjectPlacement : MonoBehaviour
 				_object.transform.position = new Vector3(2000, 2000, 2000); // way away
 			}
 
+			bool validPosition = false;
 
-			bool validPosition = true;
 			int numNodes = _object.transform.Find("Nodes").childCount;
 
-
-			for (int x = 0; x < numNodes; x++)
+			if (readyToRotate)
 			{
-				Transform node = _object.transform.Find("Nodes").GetChild(x);
-				node.GetChild(0).gameObject.SetActive(false);
+				validPosition = true;
 
-				Vector3 pos = node.transform.position;
-				pos.y += 2f;
-
-
-				if (!Physics.Raycast(pos, Vector3.down, 4f, groundLayer, QueryTriggerInteraction.Collide))
+				for (int x = 0; x < numNodes; x++)
 				{
-					validPosition = false;
-					node.GetChild(0).GetComponent<Renderer>().material = invalidMat;
-					node.GetChild(0).gameObject.SetActive(true);
-				}
-				else if (x == 0)
-				{
-					node.GetChild(0).GetComponent<Renderer>().material = validMat;
-					node.GetChild(0).gameObject.SetActive(true);
-				}
+					Transform node = _object.transform.Find("Nodes").GetChild(x);
+					node.GetChild(0).gameObject.SetActive(false);
 
-				RaycastHit _hit;
-				LayerMask nodeLayer = LayerMask.GetMask("Node");
-				if (Physics.Raycast(pos, Vector3.down, out _hit, 4f, nodeLayer, QueryTriggerInteraction.Collide))
-				{
-					if (_hit.transform.tag == "EdgeNode")
+					Vector3 pos = node.transform.position;
+					pos.y += 2f;
+
+
+					if (!Physics.Raycast(pos, Vector3.down, 4f, groundLayer, QueryTriggerInteraction.Collide))
 					{
-						if (node.tag != "EdgeNode")
+						validPosition = false;
+						node.GetChild(0).GetComponent<Renderer>().material = invalidMat;
+						node.GetChild(0).gameObject.SetActive(true);
+					}
+					else if (x == 0)
+					{
+						node.GetChild(0).GetComponent<Renderer>().material = validMat;
+						node.GetChild(0).gameObject.SetActive(true);
+					}
+
+					RaycastHit _hit;
+					LayerMask nodeLayer = LayerMask.GetMask("Node");
+					if (Physics.Raycast(pos, Vector3.down, out _hit, 4f, nodeLayer, QueryTriggerInteraction.Collide))
+					{
+						if (_hit.transform.tag == "EdgeNode")
+						{
+							if (node.tag != "EdgeNode")
+							{
+								validPosition = false;
+								node.GetChild(0).GetComponent<Renderer>().material = invalidMat;
+								node.GetChild(0).gameObject.SetActive(true);
+							}
+						}
+						if (_hit.transform.tag == "Node")
 						{
 							validPosition = false;
 							node.GetChild(0).GetComponent<Renderer>().material = invalidMat;
 							node.GetChild(0).gameObject.SetActive(true);
 						}
 					}
-					if (_hit.transform.tag == "Node")
+					else if (x == 0)
 					{
-						validPosition = false;
-						node.GetChild(0).GetComponent<Renderer>().material = invalidMat;
+						node.GetChild(0).GetComponent<Renderer>().material = validMat;
 						node.GetChild(0).gameObject.SetActive(true);
 					}
 				}
-				else if (x == 0)
+			}
+			else
+			{
+				for (int x = 0; x < numNodes; x++)
 				{
-					node.GetChild(0).GetComponent<Renderer>().material = validMat;
-					node.GetChild(0).gameObject.SetActive(true);
+					Transform node = _object.transform.Find("Nodes").GetChild(x);
+					node.GetChild(0).gameObject.SetActive(false);
 				}
 			}
 
-			if (rotate)
+
+			if (rotate && readyToRotate)
 			{
-				_object.transform.Rotate(0, 60, 0);
+				readyToRotate = false;
+				StartCoroutine(Rotate(_object));
 			}
 
 			if (cancel)
@@ -245,6 +260,26 @@ public class ObjectPlacement : MonoBehaviour
 		placingObject = false;
 		readyToPlace = false;
 
+	}
+
+	IEnumerator Rotate(GameObject _object)
+	{
+
+		int timeout = 20;
+		Vector3 currentRot = _object.transform.rotation.eulerAngles;
+		Vector3 targetRot = new Vector3(currentRot.x, currentRot.y + 60, currentRot.z);
+		while (timeout > 0)
+		{
+			_object.transform.rotation = Quaternion.Lerp(_object.transform.rotation, Quaternion.Euler(targetRot), .2f);
+			timeout--;
+			yield return new WaitForEndOfFrame();
+		}
+
+		_object.transform.rotation = Quaternion.Euler(targetRot);
+		readyToRotate = true;
+
+		yield return new WaitForEndOfFrame();
+		//this isnt working
 	}
 
 }

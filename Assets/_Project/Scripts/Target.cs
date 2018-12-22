@@ -6,7 +6,7 @@ public class Target : MonoBehaviour
 {
 
 	GameManager gameManager;
-	Resources resources;
+	LoadedResources loadedResources;
 	TaskCreator taskCreator;
 	TreeStuff tree;
 
@@ -57,7 +57,7 @@ public class Target : MonoBehaviour
 	private void Start()
 	{
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-		resources = gameManager.GetComponent<Resources>();
+		loadedResources = gameManager.GetComponent<LoadedResources>();
 		taskCreator = gameManager.GetComponent<TaskCreator>();
 
 		taskCreator.targets.Add(gameObject); // add ourselves to the list of targets in TaskCreator

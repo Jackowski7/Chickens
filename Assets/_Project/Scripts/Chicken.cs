@@ -9,7 +9,7 @@ public class Chicken : MonoBehaviour
 	GameManager gameManager;
 	ChickenManager chickenManager;
 	TaskCreator taskCreator;
-	Resources resources;
+	LoadedResources loadedResources;
 	Chicken chicken;
 	AIPath ai;
 
@@ -77,11 +77,9 @@ public class Chicken : MonoBehaviour
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		chickenManager = gameManager.gameObject.GetComponent<ChickenManager>();
 		taskCreator = gameManager.gameObject.GetComponent<TaskCreator>();
-		resources = gameManager.gameObject.GetComponent<Resources>();
+		loadedResources = gameManager.gameObject.GetComponent<LoadedResources>();
 		chicken = GetComponent<Chicken>();
 		ai = GetComponent<AIPath>();
-
-		chickenManager.NewChicken(chicken); // log us in the chickenmanager database and assign a job/status/home etc.
 
 		if (age == 0)
 		{
@@ -691,7 +689,6 @@ public class Chicken : MonoBehaviour
 
 			for (int y = 0; y < nodesHit.Length; y++)
 			{
-				Debug.Log(nodesHit[y].transform.tag);
 				if (nodesHit[y].transform.tag != "Ground")
 				{
 					badSpot = true;
@@ -708,7 +705,7 @@ public class Chicken : MonoBehaviour
 		if (spotFound)
 		{
 			GameObject placeHolder;
-			placeHolder = Instantiate(resources.treePlaceHolder, spot, Quaternion.Euler(Vector3.zero));
+			placeHolder = Instantiate(loadedResources.treePlaceHolder, spot, Quaternion.Euler(Vector3.zero));
 			taskCreator.PlantTree(chicken);
 			return true;
 		}
@@ -725,9 +722,11 @@ public class Chicken : MonoBehaviour
 		int random = Random.Range(0, 5);
 		Vector3 randomRot = new Vector3(0, random * 60, 0);
 
-		GameObject sapling;
-		sapling = Instantiate(resources.sapling, target.transform.position, Quaternion.Euler(randomRot));
-		sapling.GetComponent<TreeStuff>().Place();
+		GameObject Tree;
+		Tree = Instantiate(loadedResources.sapling, target.transform.position, Quaternion.Euler(randomRot));
+		TreeStuff treeStuff = Tree.GetComponent<TreeStuff>();
+		treeStuff.SetSapling();
+
 		RemoveReservation(); // free up a space 
 		jobTaskComplete = true; // set job task complete, so we get next job in queue
 	}
@@ -842,6 +841,9 @@ public class Chicken : MonoBehaviour
 
 	public void Place()
 	{
+		chickenManager.NewChicken(chicken); // log us in the chickenmanager database and assign a job/status/home etc.
+		this.GetComponent<Rigidbody>().useGravity = true;
+
 		int numNodes = transform.Find("Nodes").childCount;
 		for (int x = 0; x < numNodes; x++)
 		{

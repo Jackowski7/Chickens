@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6183749684769060909
 Transform:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 7579602523901166934}
   - component: {fileID: 8556293736190357034}
   m_Layer: 22
-  m_Name: EdgeNode
+  m_Name: Node_Edge
   m_TagString: EdgeNode
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

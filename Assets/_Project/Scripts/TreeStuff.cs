@@ -9,8 +9,6 @@ public class TreeStuff : MonoBehaviour
 	Target target;
 
 	[Header("Tree Stuff")]
-	[Tooltip("Is this treefully grown?")]
-	public bool treeGrown;
 	[Tooltip("How grown is this tree?")]
 	[Range(0, 100)]
 	public int treeGrowth;
@@ -23,27 +21,37 @@ public class TreeStuff : MonoBehaviour
 	public int woodAmount;
 
 
-	// Start is called before the first frame update
-	void Start()
-    {
+	private void Awake()
+	{
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 		target = gameObject.GetComponent<Target>();
 
 		//color tree
-		Renderer rend = transform.GetChild(0).GetChild(0).GetComponent<Renderer>();
+		//Renderer rend = transform.Find("Tree/Leaves").GetComponent<Renderer>();
+		Renderer rend = transform.Find("Tree").GetChild(0).GetComponent<Renderer>();
 		Color color = rend.materials[1].color;
-		color.r = Mathf.Clamp(Random.Range(color.r - .28f, color.r + .28f), 0, 255);
+		color.r = Mathf.Clamp(Random.Range(color.r - .18f, color.r + .18f), 0, 255);
 		color.g = Mathf.Clamp(Random.Range(color.g - .18f, color.g + .18f), 0, 255);
 		color.b = Mathf.Clamp(Random.Range(color.b - .08f, color.b + .08f), 0, 255);
 		rend.materials[1].color = color;
 
-		if (!treeGrown)
-			StartCoroutine(GrowTree());
+
+		//disable by default
+		transform.Find("Tree").gameObject.SetActive(false);
+		transform.Find("Logs").gameObject.SetActive(false);
+		//transform.Find("Sapling").gameObject.SetActive(false);
+		transform.Find("Snow").gameObject.SetActive(false);
+	}
+
+	void Start()
+	{
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		target = gameObject.GetComponent<Target>();
 	}
 
 	private void Update()
 	{
-		if (target.targetType == TargetType.Tree && treeGrown && treeHP <= 0) // once this tree (grown) has been chopped
+		if (target.targetType == TargetType.Tree && treeGrowth >= 100 && treeHP <= 0) // once this tree (grown) has been chopped
 		{
 			CutDownTree();
 		}
@@ -54,16 +62,23 @@ public class TreeStuff : MonoBehaviour
 		}
 	}
 
+	public void SetSapling()
+	{
+		StartCoroutine(GrowTree());
+		Place();
+	}
+
 	public IEnumerator GrowTree()
 	{
 		name = "Sapling";
-		transform.GetChild(0).gameObject.SetActive(true);
-		transform.Find("Logs").gameObject.SetActive(false);
+
+		treeGrowth = 0;
+		transform.Find("Tree").gameObject.SetActive(true);
 
 		while (treeGrowth < 100)
 		{
-			treeGrowth++; 
-			transform.localScale = Vector3.one * treeGrowth / 100;
+			treeGrowth++;
+			transform.Find("Tree").gameObject.transform.localScale = Vector3.one * treeGrowth / 100;
 
 			yield return new WaitForSeconds(1 / gameManager.gameSpeed);
 
@@ -73,16 +88,14 @@ public class TreeStuff : MonoBehaviour
 
 	public void SetTree()
 	{
-		treeGrown = true;
-
 		transform.localScale = Vector3.one;
 		treeHP = 100;
 
 		target.actions.Clear(); // remove actions
 		target.actions.Add(Action.ChopTree); // add chop tree to actions
 		target.targetType = TargetType.Tree;
-		transform.Find("GrownTree").gameObject.SetActive(true);
-		transform.Find("Logs").gameObject.SetActive(false);
+		transform.Find("Tree").gameObject.SetActive(true);
+		transform.Find("Snow").gameObject.SetActive(true);
 
 		for (int x = 0; x < target.inventory.Count; x++)
 		{
@@ -96,12 +109,13 @@ public class TreeStuff : MonoBehaviour
 		target.targetType = TargetType.Wood;
 		target.actions.Add(Action.Get);
 		target.inventory[2] = new Vector2(woodAmount, 0); // set wood amount to woodAmount
-		transform.Find("GrownTree").gameObject.SetActive(false);
+		transform.Find("Tree").gameObject.SetActive(false);
 		transform.Find("Logs").gameObject.SetActive(true);
 	}
 
 	public void Place()
 	{
+
 		int numNodes = transform.Find("Nodes").childCount;
 		for (int x = 0; x < numNodes; x++)
 		{

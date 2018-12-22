@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstarPathfindingProject", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{68D300CB-6F14-07D1-7A0E-ED17F74DEE59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{988B9AD6-9279-A99B-5CB6-5D952995C3B7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstarPathfindingProjectEditor", "AstarPathfindingProjectEditor.csproj", "{90544B92-CDF3-26FA-2D84-90B047A98DF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageToolsEditor", "PackageToolsEditor.csproj", "{F48E8267-BDE2-9659-86D2-46C3BC106DC7}"
@@ -23,6 +25,10 @@ Global
 		{68D300CB-6F14-07D1-7A0E-ED17F74DEE59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D300CB-6F14-07D1-7A0E-ED17F74DEE59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D300CB-6F14-07D1-7A0E-ED17F74DEE59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{988B9AD6-9279-A99B-5CB6-5D952995C3B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{988B9AD6-9279-A99B-5CB6-5D952995C3B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{988B9AD6-9279-A99B-5CB6-5D952995C3B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{988B9AD6-9279-A99B-5CB6-5D952995C3B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{90544B92-CDF3-26FA-2D84-90B047A98DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90544B92-CDF3-26FA-2D84-90B047A98DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90544B92-CDF3-26FA-2D84-90B047A98DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU

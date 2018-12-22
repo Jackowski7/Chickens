@@ -68,10 +68,10 @@ MonoBehaviour:
   - 0
   - 0
   - 2
+  - 10
   - 15
-  - 10
-  - 10
-  - 0
+  - 50
+  - 25
   levelRocks:
   - 50
   - 10
@@ -80,7 +80,7 @@ MonoBehaviour:
   - 15
   - 15
   - 15
-  tree: {fileID: 8831701210040935273, guid: 5e3364ae04efca144a2808fb2082204d, type: 3}
+  tree: {fileID: 6687927665604727100, guid: cc66f8346715c4f43bb561a357e98e57, type: 3}
   rock: {fileID: 2904810629502190381, guid: 392d2e1add5aa1a4a80f4b36b46c7fde, type: 3}
 --- !u!1 &7684776615744672979
 GameObject:
@@ -241,15 +241,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8556293736190357034, guid: c5b8bacbe1fef684499a277f7145ac91,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1173009158250739731, guid: c5b8bacbe1fef684499a277f7145ac91,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8556293736190357034, guid: c5b8bacbe1fef684499a277f7145ac91,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5b8bacbe1fef684499a277f7145ac91, type: 3}

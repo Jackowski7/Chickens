@@ -6,166 +6,74 @@ public class SeasonalDecoration : MonoBehaviour
 {
 
 	GameManager gameManager;
-	Season _season;
-	Season seasonSetter;
+	public Season season;
+	Season currentSeason;
 
-	public List<GameObject> springDecor = new List<GameObject> { };
-	public List<GameObject> summerDecor = new List<GameObject> { };
-	public List<GameObject> fallDecor = new List<GameObject> { };
-	public List<GameObject> winterDecor = new List<GameObject> { };
+	bool transitioning;
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		_season = gameManager.season;
-
-		if (_season != seasonSetter)
+		if (!transitioning)
 		{
-			seasonSetter = _season;
-			StartCoroutine(SetSeason(_season));
-		}
+			currentSeason = gameManager.season;
 
+			if (currentSeason == season)
+			{
+				StartCoroutine(BeginSeason());
+			}
+			if (currentSeason != season)
+			{
+				StartCoroutine(EndSeason());
+			}
+		}
 	}
 
-	IEnumerator SetSeason(Season season)
+	IEnumerator BeginSeason()
 	{
-		float inRate = .04f;
-		float outRate = .06f;
+		transitioning = true;
 
-		while (season == seasonSetter)
+		float rate = .04f;
+		yield return new WaitForSeconds(Random.Range(0, 2f));
+
+		Vector3 targetScale = Vector3.one;
+
+		while (transform.localScale.y < .995f)
 		{
-			for (int x = 0; x < springDecor.Count; x++)
-			{
-				GameObject element = springDecor[x];
-				Vector3 currentScale = element.transform.localScale;
-				Vector3 targetScale = currentScale;
+			Vector3 currentScale = transform.localScale;
 
-				Color currentColor = element.GetComponent<Renderer>().material.color;
-				Color targetColor = currentColor;
-
-				if (season == Season.Spring)
-				{
-					targetScale.y = 1;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, inRate);
-
-					targetColor.a = 1;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, inRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-				else
-				{
-					targetScale.y = 0;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, outRate);
-
-					targetColor.a = 0;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, outRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-			}
-
-			for (int x = 0; x < summerDecor.Count; x++)
-			{
-				GameObject element = summerDecor[x];
-				Vector3 currentScale = element.transform.localScale;
-				Vector3 targetScale = currentScale;
-
-				Color currentColor = element.GetComponent<Renderer>().material.color;
-				Color targetColor = currentColor;
-
-				if (season == Season.Summer)
-				{
-					targetScale.y = 1;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, inRate);
-
-					targetColor.a = 1;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, inRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-				else
-				{
-					targetScale.y = 0;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, outRate);
-
-					targetColor.a = 0;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, outRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-			}
-
-			for (int x = 0; x < fallDecor.Count; x++)
-			{
-				GameObject element = fallDecor[x];
-				Vector3 currentScale = element.transform.localScale;
-				Vector3 targetScale = currentScale;
-
-				Color currentColor = element.GetComponent<Renderer>().material.color;
-				Color targetColor = currentColor;
-
-				if (season == Season.Fall)
-				{
-					targetScale.y = 1;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, inRate);
-
-					targetColor.a = 1;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, inRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-				else
-				{
-					targetScale.y = 0;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, outRate);
-
-					targetColor.a = 0;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, outRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-			}
-
-			for (int x = 0; x < winterDecor.Count; x++)
-			{
-				GameObject element = winterDecor[x];
-				Vector3 currentScale = element.transform.localScale;
-				Vector3 targetScale = currentScale;
-
-				Color currentColor = element.GetComponent<Renderer>().material.color;
-				Color targetColor = currentColor;
-
-				if (season == Season.Winter)
-				{
-					targetScale.y = 1;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, inRate);
-
-					targetColor.a = 1;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, inRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-				else
-				{
-					targetScale.y = 0;
-					element.transform.localScale = Vector3.Lerp(currentScale, targetScale, outRate);
-
-					targetColor.a = 0;
-					float alpha = Mathf.Lerp(currentColor.a, targetColor.a, outRate);
-					targetColor.a = alpha;
-					element.GetComponent<Renderer>().material.color = targetColor;
-				}
-			}
-
+			transform.localScale = Vector3.Lerp(currentScale, targetScale, rate);
 			yield return new WaitForEndOfFrame();
 		}
+
+		transitioning = false;
 	}
+
+	IEnumerator EndSeason()
+	{
+		transitioning = true;
+
+		float rate = .4f;
+		yield return new WaitForSeconds(Random.Range(0, 2f));
+
+		Vector3 targetScale = new Vector3(.8f, 0, .8f);
+
+		while (transform.localScale.y > .005f)
+		{
+			Vector3 currentScale = transform.localScale;
+
+			transform.localScale = Vector3.Lerp(currentScale, targetScale, rate);
+			yield return new WaitForEndOfFrame();
+		}
+
+		transitioning = false;
+	}
+
+
 }

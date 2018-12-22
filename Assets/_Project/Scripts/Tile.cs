@@ -126,8 +126,10 @@ public class Tile : MonoBehaviour
 						if (!Physics.Raycast(raycastOrgin, Vector3.down, 4f, nodeLayer, QueryTriggerInteraction.Collide))
 						{
 							Transform treeFolder = transform.parent.parent.Find("TreeFolder").transform;
-							GameObject o = Instantiate(tree, transform.position, Quaternion.Euler(randomRot), treeFolder);
-							o.GetComponent<Target>().Place();
+							GameObject Tree = Instantiate(tree, transform.position, Quaternion.Euler(randomRot), treeFolder);
+							TreeStuff treeStuff = Tree.GetComponent<TreeStuff>();
+							treeStuff.SetTree();
+							treeStuff.Place();
 						}
 					}
 				}

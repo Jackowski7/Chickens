@@ -466,5 +466,16 @@ PrefabInstance:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 313113604, guid: 0317f93ef0c13d14697d527f1f1643a6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 5142248587203231596, guid: 1821eaf5c939c11408cb93503a04285f,
+        type: 3}
+    - target: {fileID: 8477598284722192379, guid: 0317f93ef0c13d14697d527f1f1643a6,
+        type: 3}
+      propertyPath: sapling
+      value: 
+      objectReference: {fileID: 6687927665604727100, guid: cc66f8346715c4f43bb561a357e98e57,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0317f93ef0c13d14697d527f1f1643a6, type: 3}
